@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>La Manifestación | Menú Digital</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Passion+One:wght@900&family=Roboto:wght@400;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { 
+                        'brand-yellow': '#FFC107', 'brand-dark': '#111827', 'brand-card': '#1F2937', 
+                        'cowboys-blue': '#003594', 'facebook': '#1877F2', 'instagram': '#E4405F', 'tiktok': '#010101'
+                    },
+                    fontFamily: { sans: ['Roboto', 'sans-serif'], header: ['Oswald', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { -webkit-text-size-adjust: 100%; touch-action: manipulation; padding-top: env(safe-area-inset-top); }
+        .fade-in { animation: fadeIn 0.3s ease-out forwards; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .logo-spectacular { font-family: 'Passion One', cursive; color: #D50000; text-shadow: 1px 1px 0 #FFF, -1px -1px 0 #FFF, 1px -1px 0 #FFF, -1px 1px 0 #FFF, 2px 2px 0 #000; transform: skewX(-5deg); }
+        
+        .category-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; }
+        .category-content.active { max-height: 10000px; transition: max-height 0.8s ease-in; }
+        .rotate-icon { transition: transform 0.3s ease; }
+        .rotate-icon.active { transform: rotate(180deg); }
+        
+        .category-header { cursor: pointer; transition: all 0.2s; }
+        .category-title { font-family: 'Oswald', sans-serif; font-size: 1.5rem; letter-spacing: -0.02em; }
+        .price-tag { font-family: 'Roboto', sans-serif; font-weight: 900; color: #FFC107; font-style: italic; }
+    </style>
+</head>
+<body class="bg-brand-dark text-gray-100 font-sans min-h-screen flex flex-col overflow-x-hidden">
+
+    <nav class="sticky top-0 z-50 bg-brand-dark/95 backdrop-blur-sm border-b border-gray-800 shadow-md w-full">
+        <div class="max-w-7xl mx-auto px-4 h-14 flex justify-between items-center">
+            <h1 class="text-lg sm:text-xl uppercase logo-spectacular leading-none">LA MANIFESTACIÓN</h1>
+            
+            <div class="flex bg-gray-800 rounded-full p-0.5 gap-0.5 border border-gray-700">
+                <button onclick="switchTab('menu')" id="btn-menu" class="px-3 py-1.5 rounded-full text-[9px] font-black transition bg-brand-yellow text-brand-dark uppercase italic">MENÚ</button>
+                <button onclick="switchTab('social')" id="btn-social" class="px-3 py-1.5 rounded-full text-[9px] font-black transition text-gray-400 uppercase italic">ARENA</button>
+                <button onclick="switchTab('lealtad')" id="btn-lealtad" class="px-3 py-1.5 rounded-full text-[9px] font-black transition text-gray-400 uppercase italic">MVP</button>
+            </div>
+
+            <div class="flex items-center gap-1">
+                <a href="https://www.facebook.com/share/1My6VhbEEG/" target="_blank" class="bg-facebook p-1.5 rounded-full flex items-center justify-center"><svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-8.74h-2.94v-3.411h2.94v-2.517c0-2.915 1.78-4.502 4.38-4.502 1.244 0 2.315.093 2.626.134v3.045l-1.802.001c-1.414 0-1.688.672-1.688 1.658v2.171h3.37l-.439 3.411h-2.931v8.74h6.035c.731 0 1.324-.593 1.324-1.324v-21.351c0-.732-.593-1.325-1.324-1.325z"/></svg></a>
+                <a href="https://www.tiktok.com/@lamanifestacionsandb" target="_blank" class="bg-tiktok p-1.5 rounded-full flex items-center justify-center"><svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.9-.32-1.98-.23-2.81.33-.85.51-1.44 1.43-1.58 2.41-.14 1.01.23 2.06.94 2.78.73.71 1.76.99 2.75.8.94-.17 1.76-.78 2.22-1.6.26-.41.39-.89.41-1.37.02-3.33.01-6.66.01-10z"/></svg></a>
+                <button onclick="abrirWhatsReserva()" class="bg-green-600 px-3 py-1.5 rounded-full text-[9px] font-black uppercase italic">RESERVAR</button>
+            </div>
+        </div>
+    </nav>
+
+    <div id="view-menu" class="fade-in w-full">
+        <div class="relative bg-gray-900 h-52 flex items-center justify-center overflow-hidden">
+            <img src="IMG/portada.jpg" class="absolute inset-0 w-full h-full object-cover opacity-60">
+            <div class="absolute inset-0 bg-gradient-to-t from-brand-dark via-transparent to-transparent"></div>
+            <div class="relative text-center px-4">
+                <h1 class="text-3xl font-header font-bold uppercase italic tracking-widest text-white leading-none mb-1">SNACKS <span class="text-brand-yellow">&</span> BEER</h1>
+                <p class="text-brand-yellow text-[10px] font-black uppercase tracking-[0.3em] italic">Menú Interactivo</p>
+            </div>
+        </div>
+        
+        <main class="max-w-4xl mx-auto px-4 -mt-6 relative z-10 pb-24" id="accordion-container"></main>
+    </div>
+
+    <div id="view-social" class="hidden fade-in w-full pb-24 text-center">
+        <div class="bg-cowboys-blue py-10 px-4 border-b-4 border-brand-yellow">
+            <h2 class="text-3xl font-header font-bold text-white uppercase italic leading-none mb-2">UBICACIÓN Y ARENA</h2>
+            <p class="text-brand-yellow font-black text-[10px] uppercase tracking-widest italic leading-none italic">Av. de la República 135, Tabacalera, CDMX.</p>
+        </div>
+        <main class="max-w-4xl mx-auto px-4 py-8">
+            <div class="rounded-2xl overflow-hidden h-72 border-2 border-gray-700 shadow-2xl">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3763.5555416752044!2d-99.1568285!3d19.3992211!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d1ff0613203f5b%3A0x88c4d7d8e8749f7e!2sLa%20Manifestaci%C3%B3n!5e0!3m2!1ses!2smx!4v1708890000000!5m2!1ses!2smx4" class="w-full h-full border-0" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+        </main>
+    </div>
+
+    <div id="view-lealtad" class="hidden fade-in w-full pb-24 text-center">
+        <div class="bg-gradient-to-b from-cowboys-blue to-brand-dark py-12 px-4">
+            <h1 class="text-3xl font-header font-bold text-white mb-6 uppercase italic">SISTEMA <span class="text-brand-yellow">MVP</span></h1>
+            <div class="max-w-md mx-auto bg-brand-card border border-gray-700 rounded-3xl p-8 shadow-2xl text-left">
+                <h3 class="text-brand-yellow font-header font-bold text-xl uppercase italic mb-1 leading-none italic">Tu opinión es Oro</h3>
+                <div class="flex justify-center gap-2 my-8" id="stars-container">
+                    <span onclick="setRating(1)" class="rating-star">★</span><span onclick="setRating(2)" class="rating-star">★</span><span onclick="setRating(3)" class="rating-star">★</span><span onclick="setRating(4)" class="rating-star">★</span><span onclick="setRating(5)" class="rating-star">★</span>
+                </div>
+                <button onclick="enviarReseña()" class="w-full bg-white text-brand-dark font-black py-4 rounded-xl uppercase active:scale-95 transition text-xs italic shadow-lg italic">ENVIAR FEEDBACK AL DUEÑO 🏆</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="product-modal" class="fixed inset-0 z-[100] hidden">
+        <div class="absolute inset-0 bg-black/95 backdrop-blur-md" onclick="closeModal()"></div>
+        <div class="flex min-h-full items-center justify-center p-4">
+            <div class="relative w-full max-w-lg bg-brand-card rounded-3xl overflow-hidden shadow-2xl">
+                <button onclick="closeModal()" class="absolute top-4 right-4 bg-black/60 text-white rounded-full h-8 w-8 flex items-center justify-center font-bold">✕</button>
+                <img id="modal-img" src="" class="w-full h-48 object-cover bg-gray-900">
+                <div class="p-6">
+                    <h3 id="modal-title" class="text-xl font-header font-black text-white uppercase italic mb-1"></h3>
+                    <p id="modal-desc" class="text-gray-400 text-xs italic leading-tight mb-6"></p>
+                    <div id="modal-prices-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3 border-t border-gray-700 pt-4"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const WHATSAPP_DUEÑO = "5215555663481"; 
+
+        const MENU_DATA = [
+            { 
+                id: 'promos', name: '🔥 PROMOCIONES', isOpen: true,
+                items: [
+                    { name: "Martes Combo 3x3", description: "3 Litros de Cerveza helada + 3 Hamburguesas con queso derretido.", price: 549, image: "IMG/Martes Combo 3x3.jpg" },
+                    { name: "Miércoles Pizzas", description: "En la compra de tu pizza, Margaritas y Mojitos a precio especial.", price: 99, image: "IMG/Miercoles Pizzas.jpg" },
+                    { name: "Jueves Manicoctelería", description: "Toda la coctelería a $99 pidiendo tu Molcajete burbujeante.", price: 99, image: "IMG/Jueves Manicocteleria 99.jpg" },
+                    { name: "COMETODO $239", description: "Buffet ILIMITADO para verdaderos campeones. ¡Come todo lo que quieras!", price: 239, image: "IMG/COMETODO 239.jpg" }
+                ]
+            },
+            { 
+                id: 'favs', name: '⭐ LO MÁS PEDIDO', isOpen: false,
+                items: [
+                    { name: "Licuachela (700 ml)", description: "Cerveza escarchada con chamoy artesanal y lluvia de gomitas.", price: 165, image: "IMG/Licuachela (700 ml).jpg" },
+                    { name: "Mojito Sabores (950 ml)", description: "Un litro de frescura total con hierbabuena macerada al momento.", price: 179, image: "IMG/Mojitos Sabores (450-950ml).jpg" },
+                    { name: "Canoa Shot Sandía", description: "Espectacular canoa de gelatina vibrante, cargada con 9oz de Vodka.", price: 225, image: "IMG/Canoa Shot Sandia.jpg" }
+                ]
+            },
+            { 
+                id: 'burgers', name: '🍔 MANIBURGERS', isOpen: false,
+                items: [
+                    { name: "Burger Clásica", description: "Doble carne jugosa, jamón a la plancha y tocino crujiente.", price: 215, image: "IMG/Burger Clasica.jpg" },
+                    { name: "Sin Miedo al Éxito", description: "Res jugosa, abundante guacamole y huevo estrellado derramando sabor.", price: 225, image: "IMG/Sin Miedo al Exito.jpg" },
+                    { name: "Tocinator", description: "Carne envuelta completamente en una coraza de tocino doradito.", price: 255, image: "IMG/Tocinator.jpg" }
+                ]
+            },
+            { 
+                id: 'mexico', name: '🇲🇽 MÉXICO LINDO', isOpen: false,
+                items: [
+                    { name: "Molcajete Mixto", description: "Arrachera, pollo y longaniza burbujeando en salsa molcajeteada.", price: 465, image: "IMG/Molcajete Mixto.jpg" },
+                    { name: "Quesabirria (3pz)", description: "Quesadillas fritas en su birria, listas para chopear en consomé.", price: 210, image: "IMG/Quesabirria (3pz).jpg" }
+                ]
+            },
+            { 
+                id: 'snacks', name: '🍟 SNACKS & BOTANAS', isOpen: false,
+                items: [
+                    { name: "Alitas (12 pz)", description: "Jugosas alitas bañadas generosamente en tu salsa favorita.", price: 259, image: "IMG/Alitas (6-12pz).jpg" },
+                    { name: "Cubos Queso (15 pz)", description: "Cuadritos de queso manchego empanizados y muy dorados.", price: 179, image: "IMG/Cubos Queso (15pz).jpg" }
+                ]
+            },
+            { 
+                id: 'destilados', name: '🥃 DESTILADOS', isOpen: false,
+                items: [
+                    { name: "Fundador", description: "Brandy clásico y equilibrado.", price: 121, priceCuba: 145, bottlePrice: 1750, isSpirit: true },
+                    { name: "Torres X", description: "Brandy reserva con elegantes notas de madera.", price: 121, priceCuba: 145, bottlePrice: 1750, isSpirit: true },
+                    { name: "Don Julio 70", description: "Añejo Cristalino suave con la frescura del blanco.", price: 210, priceCuba: 245, bottlePrice: 3190, isSpirit: true },
+                    { name: "JW Etiqueta Negra", description: "Whisky escocés profundo y sutilmente ahumado.", price: 155, priceCuba: 185, bottlePrice: 2190, isSpirit: true }
+                ]
+            },
+            { 
+                id: 'chelas', name: '🍺 CERVEZAS', isOpen: false,
+                items: [
+                    { name: "Tarro Grande (940 ml)", description: "Casi un litro de felicidad y espuma perfecta.", price: 129, image: "IMG/Tarro Grande (940 ml).jpg" },
+                    { name: "Caguamas", description: "Tecate/Indio o Heineken bien frías.", price: 125, image: "IMG/Caguamas.jpg" }
+                ]
+            }
+        ];
+
+        function renderAccordion() {
+            const container = document.getElementById('accordion-container');
+            container.innerHTML = '';
+            MENU_DATA.forEach(section => {
+                const sectionEl = document.createElement('div');
+                sectionEl.className = "mb-4 fade-in";
+                sectionEl.innerHTML = `
+                    <div class="category-header flex justify-between items-center py-4 bg-brand-card/70 px-5 rounded-2xl border border-gray-700 shadow-lg" onclick="toggleAccordion('${section.id}')">
+                        <span class="category-title text-brand-yellow font-bold uppercase italic">${section.name}</span>
+                        <svg class="w-5 h-5 text-brand-yellow rotate-icon ${section.isOpen ? 'active' : ''}" id="icon-${section.id}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                    <div class="category-content ${section.isOpen ? 'active' : ''} space-y-3 mt-3 px-1" id="content-${section.id}">
+                        ${section.items.map(item => `
+                            <div class="bg-brand-card/40 rounded-2xl overflow-hidden border border-gray-800 p-3 flex gap-3 cursor-pointer active:bg-gray-800 transition" onclick='openModal(${JSON.stringify(item)})'>
+                                ${item.image ? `<div class="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 bg-gray-900"><img src="${item.image}" class="w-full h-full object-cover"></div>` : ''}
+                                <div class="flex-grow flex flex-col justify-center">
+                                    <div class="flex justify-between items-start">
+                                        <h3 class="font-black text-white uppercase text-[11px] italic leading-tight">${item.name}</h3>
+                                        <span class="price-tag text-sm">$${item.price}</span>
+                                    </div>
+                                    <p class="text-gray-500 text-[9px] uppercase font-bold leading-tight mt-1 line-clamp-2">${item.description}</p>
+                                    ${item.isSpirit ? `<p class="text-[7px] text-brand-yellow font-black mt-2 tracking-widest uppercase italic">Ver precios de botella y maxicuba</p>` : ''}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(sectionEl);
+            });
+        }
+
+        function toggleAccordion(id) {
+            const content = document.getElementById(`content-${id}`);
+            const icon = document.getElementById(`icon-${id}`);
+            content.classList.toggle('active');
+            icon.classList.toggle('active');
+        }
+
+        function openModal(item) {
+            const container = document.getElementById('modal-prices-container');
+            const modalImg = document.getElementById('modal-img');
+            modalImg.className = (item.isSpirit || !item.image) ? "hidden" : "w-full h-48 object-cover";
+            modalImg.src = item.image || '';
+            document.getElementById('modal-title').innerText = item.name;
+            document.getElementById('modal-desc').innerText = item.description;
+            container.innerHTML = `<div class="bg-gray-800 p-3 rounded-xl border border-gray-700 text-center"><p class="text-gray-500 text-[8px] font-black italic">PRECIO</p><p class="text-xl font-black text-brand-yellow">$${item.price}</p></div>
+                ${item.priceCuba ? `<div class="bg-brand-yellow text-brand-dark p-3 rounded-xl text-center shadow-xl"><p class="text-[8px] font-black italic">MAXICUBA</p><p class="text-xl font-black">$${item.priceCuba}</p></div>` : ''}
+                ${item.bottlePrice ? `<div class="bg-gray-900 p-3 rounded-xl border border-gray-800 text-center col-span-full mt-2"><p class="text-gray-500 text-[8px] font-black italic">BOTELLA</p><p class="text-xl font-black text-brand-yellow">$${item.bottlePrice}</p></div>` : ''}`;
+            document.getElementById('product-modal').classList.remove('hidden');
+        }
+
+        function switchTab(tab) {
+            ['view-menu', 'view-social', 'view-lealtad'].forEach(v => document.getElementById(v).classList.add('hidden'));
+            ['btn-menu', 'btn-social', 'btn-lealtad'].forEach(b => document.getElementById(b).className = "px-3 py-1.5 rounded-full text-[9px] font-black transition text-gray-400 uppercase italic");
+            document.getElementById('view-' + tab).classList.remove('hidden');
+            document.getElementById('btn-' + tab).className = "px-3 py-1.5 rounded-full text-[9px] font-black transition bg-brand-yellow text-brand-dark uppercase italic";
+        }
+
+        function closeModal() { document.getElementById('product-modal').classList.add('hidden'); }
+        function abrirWhatsReserva() { window.open(`https://wa.me/${WHATSAPP_DUEÑO}?text=¡Hola! Quiero reservar una mesa en La Manifestación.`); }
+
+        let currentRating = 0;
+        function setRating(n) { currentRating = n; document.querySelectorAll('.rating-star').forEach((s, i) => s.classList.toggle('active', i < n)); }
+        function enviarReseña() { 
+            if(currentRating === 0) return alert("Por favor selecciona una estrella.");
+            window.open(`https://wa.me/${WHATSAPP_DUEÑO}?text=⭐ Calificación MVP: ${"⭐".repeat(currentRating)}%0A¡Gran experiencia en la Arena!`);
+        }
+
+        window.onload = () => { renderAccordion(); };
+    </script>
+</body>
+</html>
